@@ -1,10 +1,30 @@
-import { Link } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom';
 
-export default function Navbar() {
+function Layouts() {
   return (
-    <nav >
-      <Link to="/">Trang chủ</Link>
-      <Link to="/about">Giới thiệu</Link>
-    </nav>
-  )
+    <div className="min-h-screen bg-gray-100">
+      <nav className="bg-blue-600 p-4">
+        <ul className="flex space-x-4 text-white">
+          <li>
+            <Link to="/" className="hover:underline">Home</Link>
+          </li>
+          <li>
+            <Link to="/about" className="hover:underline">About</Link>
+          </li>
+          <li>
+            <Link to="/register">Register</Link>
+          </li>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        </ul>
+      </nav>
+      <div></div>
+      <main className="p-4">
+        <Outlet />
+      </main>
+    </div>
+  );
 }
+
+export default Layouts;
