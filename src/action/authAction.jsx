@@ -1,6 +1,6 @@
 export const login = (credentials) => async (dispatch) => {
   try {
-      const response = await fetch('http://localhost:8081/login', {
+      const response = await fetch('http://localhost:8081/home/login', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -36,40 +36,32 @@ export const logout = () => (dispatch) => {
   dispatch({ type: 'LOGOUT' });
 };
 
-export const register = (userData) => async (dispatch) => {
+export const register = (formData) => async (dispatch) => {
   try {
-    const response = await fetch('http://localhost:8081/register', {
+    const response = await fetch('http://localhost:8081/home/register', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(userData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
     });
 
-    if (!response.ok) {
-      const data = await response.json().catch(() => ({}));
-      throw new Error(data.message || 'Đăng ký thất bại');
+    const data = await response.text(); // backend trả chuỗi, không phải JSON
+
+    if (data === 'failed to register user') {
+      dispatch({ type: 'REGISTER_FAIL', payload: data });
+    } else {
+      dispatch({ type: 'REGISTER_SUCCESS' });
     }
-
-    const data = await response.json();
-    console.log(data);
-
-    dispatch({
-      type: 'REGISTER_SUCCESS',
-      payload: { email: data.email },
-    });
-
-    return { success: true, email: data.email };
   } catch (error) {
-    dispatch({
-      type: 'REGISTER_FAIL',
-      payload: error.message,
-    });
-    return { success: false, error: error.message };
+    dispatch({ type: 'REGISTER_FAIL', payload: 'Server error' });
   }
 };
 
+
 export const verify = (verificationData) => async (dispatch) => {
   try {
-    const response = await fetch('http://localhost:8081/verify', {
+    const response = await fetch('http://localhost:8081/home/verify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(verificationData),

@@ -4,21 +4,22 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { register } from '../../action/authAction';
 function Register(){
   const [formData, setFormData] = useState({
-    name: '',
     username: '',
+    firstName: '',
+    lastName: '',
     password: '',
-    retype: '',
+    confirmPassword: '',  
     age: '',
-    phone: '',
+    sex: '',
+    phoneNumber: '',
     email: '',
-    role: '',
+    roleId: '',
   });
-
+  
   const [termsAgreed, setTermsAgreed] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { error, isAuthenticated } = useSelector(state => state.auth || {});
-
+  const { isVerified, error, isAuthenticated } = useSelector((state) => state.auth||{});
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -36,19 +37,22 @@ function Register(){
       return;
     }
 
-    if (formData.password !== formData.retype) {
-      alert('Passwords do not match!');
+    if (formData.password !== formData.confirmPassword) {
+      alert('Password do not match!');
       return;
     }
 
     dispatch(register(formData));
   };
-
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/Verify');
+    // Chuyển hướng đến trang verify khi đăng ký thành công
+    if (isAuthenticated && !isVerified) {
+      navigate('/verify');
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, isVerified, navigate]);
+  
+  
+  
   return (
     <>
     <div className="main-container centered-flex">
@@ -92,8 +96,8 @@ function Register(){
                 <input
                   type="password"
                   id="confirm-password"
-                  name="retype"
-                  value={formData.retype}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder=""
                   required
@@ -104,21 +108,21 @@ function Register(){
               <div className="field-group">
                 <input
                   type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
+               
+                  name="firstName"
+                  value={formData.firstName}
                   onChange={handleChange}
                   placeholder=""
                   autoComplete="off"
                   required
                 />
-                <label htmlFor="name">Name</label>
+                <label htmlFor="name">FirstName</label>
                 <span className="field-icon bi bi-emoji-angry"></span>
               </div>
               <div className="field-group">
                 <input
                   type="text"
-                  id="username"
+                
                   name="username"
                   value={formData.username}
                   onChange={handleChange}
@@ -132,9 +136,51 @@ function Register(){
               <div className="field-group">
                 <input
                   type="text"
+                  name='lastName'
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  placeholder=""
+                  autoComplete="off"
+                  required
+                />
+                <label>LastName</label>
+                <span className="field-icon bi bi-phone"></span>
+              </div>
+              <div className="field-group">
+                <input
+                  type="text"
                   id="phone"
-                  name="phone"
-                  value={formData.phone}
+                  name="sex"
+                  value={formData.sex}
+                  onChange={handleChange}
+                  placeholder=""
+                  autoComplete="off"
+                  required
+                />
+                <label htmlFor="phone">Sex</label>
+                <span className="field-icon bi bi-phone"></span>
+              </div>
+              <div className="field-group">
+                <input
+                  type="text"
+               
+                  name="age"
+                  value={formData.age}
+                  onChange={handleChange}
+                  placeholder=""
+                  autoComplete="off"
+                  required
+                />
+                <label htmlFor="phone">Age</label>
+                <span className="field-icon bi bi-phone"></span>
+              </div>
+              
+              <div className="field-group">
+                <input
+                  type="text"
+                
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
                   onChange={handleChange}
                   placeholder=""
                   autoComplete="off"
@@ -146,9 +192,9 @@ function Register(){
               <div className="field-group">
                 <input
                   type="text"
-                  id="role"
-                  name="role"
-                  value={formData.role}
+          
+                  name="roleId"
+                  value={formData.roleId}
                   onChange={handleChange}
                   placeholder=""
                   autoComplete="off"
