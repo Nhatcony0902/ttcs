@@ -5,7 +5,7 @@ import NotFound from './pages/NotFound';
 import Layouts from './layouts';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import Verify from './components/Verify';
+import Verify from './pages/Verify';
 
 function App() {
   return (

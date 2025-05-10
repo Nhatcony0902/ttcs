@@ -1,91 +1,19 @@
-export const login = (credentials) => async (dispatch) => {
-  try {
-      const response = await fetch('http://localhost:8081/home/login', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(credentials),
-      });
-      
-      const data = await response.json();
-      console.log(data);
-      if (!response.ok) {
-          throw new Error(data.message || 'Đăng nhập thất bại');
-      }
+export const register = (userData) => async (dispatch) => {
+    try {
+        const res = await fetch('http://localhost:8081/home/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData),
+        });
 
-      // Lưu token vào localStorage
-      localStorage.setItem('token', data.token);
+        const result = await res.text(); // backend trả chuỗi
 
-      dispatch({
-          type: 'LOGIN_SUCCESS',
-          payload: {
-              user: data.user,
-              token: data.token,
-          },
-      });
-  } catch (error) {
-      dispatch({
-          type: 'LOGIN_FAIL',
-          payload: error.message,
-      });
-  }
-};
-export const logout = () => (dispatch) => {
-  localStorage.removeItem('token');
-  dispatch({ type: 'LOGOUT' });
-};
-
-export const register = (formData) => async (dispatch) => {
-  try {
-    const response = await fetch('http://localhost:8081/home/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-
-    const data = await response.text(); // backend trả chuỗi, không phải JSON
-
-    if (data === 'failed to register user') {
-      dispatch({ type: 'REGISTER_FAIL', payload: data });
-    } else {
-      dispatch({ type: 'REGISTER_SUCCESS' });
+        if (result === 'registered successfully') {
+            dispatch({ type: 'REGISTER_SUCCESS' });
+        } else {
+            dispatch({ type: 'REGISTER_FAIL', payload: result });
+        }
+    } catch (error) {
+        dispatch({ type: 'REGISTER_FAIL', payload: 'Something went wrong' });
     }
-  } catch (error) {
-    dispatch({ type: 'REGISTER_FAIL', payload: 'Server error' });
-  }
-};
-
-
-export const verify = (verificationData) => async (dispatch) => {
-  try {
-    const response = await fetch('http://localhost:8081/home/verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(verificationData),
-    });
-
-    if (!response.ok) {
-      const data = await response.json().catch(() => ({}));
-      throw new Error(data.message || 'Xác minh thất bại');
-    }
-
-    const data = await response.json();
-    localStorage.setItem('token', data.token);
-
-    dispatch({
-      type: 'VERIFY_SUCCESS',
-      payload: { user: data.user, token: data.token },
-    });
-
-    return { success: true };
-  } catch (error) {
-    dispatch({
-      type: 'VERIFY_FAIL',
-      payload: error.message,
-    });
-    return { success: false, error: error.message };
-  }
 };

@@ -1,25 +1,26 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { register } from '../../action/authAction';
-function Register(){
+function Register() {
   const [formData, setFormData] = useState({
     username: '',
     firstName: '',
     lastName: '',
     password: '',
-    confirmPassword: '',  
+    confirmPassword: '',
     age: '',
     sex: '',
     phoneNumber: '',
     email: '',
     roleId: '',
   });
-  
+
   const [termsAgreed, setTermsAgreed] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isVerified, error, isAuthenticated } = useSelector((state) => state.auth||{});
+  const { isVerified, error, isAuthenticated } = useSelector((state) => state.auth || {});
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -50,12 +51,12 @@ function Register(){
       navigate('/verify');
     }
   }, [isAuthenticated, isVerified, navigate]);
-  
-  
-  
+
+
+
   return (
     <>
-    <div className="main-container centered-flex">
+      <div className="main-container centered-flex">
         <div className="form-register">
           <div className="form-wrapper">
             <div className="static-text">
@@ -108,7 +109,7 @@ function Register(){
               <div className="field-group">
                 <input
                   type="text"
-               
+
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
@@ -122,7 +123,7 @@ function Register(){
               <div className="field-group">
                 <input
                   type="text"
-                
+
                   name="username"
                   value={formData.username}
                   onChange={handleChange}
@@ -163,7 +164,7 @@ function Register(){
               <div className="field-group">
                 <input
                   type="text"
-               
+
                   name="age"
                   value={formData.age}
                   onChange={handleChange}
@@ -174,11 +175,11 @@ function Register(){
                 <label htmlFor="phone">Age</label>
                 <span className="field-icon bi bi-phone"></span>
               </div>
-              
+
               <div className="field-group">
                 <input
                   type="text"
-                
+
                   name="phoneNumber"
                   value={formData.phoneNumber}
                   onChange={handleChange}
@@ -192,7 +193,7 @@ function Register(){
               <div className="field-group">
                 <input
                   type="text"
-          
+
                   name="roleId"
                   value={formData.roleId}
                   onChange={handleChange}
@@ -230,7 +231,7 @@ function Register(){
               </a>
             </div>
             <p className="login-link">
-              Already have an Account? <NavLink href="/login">Login</NavLink>
+              Already have an Account? <Link to="/login">Login</Link>
             </p>
           </div>
         </div>
