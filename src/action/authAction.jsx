@@ -17,3 +17,57 @@ export const register = (userData) => async (dispatch) => {
         dispatch({ type: 'REGISTER_FAIL', payload: 'Something went wrong' });
     }
 };
+// actions/authActions.js
+// actions/authActions.js
+export const verifyAccount = (email, verificationCode) => async (dispatch) => {
+  try {
+    dispatch({ type: 'VERIFY_REQUEST' });
+
+    const url = `http://localhost:8081/home/verify?email=${encodeURIComponent(email)}&verificationCode=${encodeURIComponent(verificationCode)}`;
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.text(); // Vì backend trả về plain text
+
+    dispatch({
+      type: 'VERIFY_SUCCESS',
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: 'VERIFY_FAIL',
+      payload: error.message || 'Verification failed',
+    });
+  }
+};
+export const loginUser = (username, password) => async (dispatch) => {
+  try {
+    dispatch({ type: 'LOGIN_REQUEST' });
+
+    const response = await fetch('http://localhost:8081/home/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+
+    const data = await response.text();
+
+    if (data === 'failed to login') {
+      dispatch({ type: 'LOGIN_FAIL', payload: 'Invalid credentials or account not verified' });
+    } else {
+      // Token received
+      localStorage.setItem('token', data); // Lưu token vào localStorage
+      dispatch({ type: 'LOGIN_SUCCESS', payload: data });
+    }
+  } catch (error) {
+    dispatch({ type: 'LOGIN_FAIL', payload: 'Network error' });
+  }
+};
+
+
+

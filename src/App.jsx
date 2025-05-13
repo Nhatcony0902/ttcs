@@ -6,6 +6,9 @@ import Layouts from './layouts';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Verify from './pages/Verify';
+import CreateShop from './components/CreateShop';
+import DeleteShop from './components/DeleteShop';
+import EditShop from './components/EditShop';
 
 function App() {
   return (
@@ -18,6 +21,9 @@ function App() {
         <Route path="register" element={<Register/>}/>
         <Route path="login" element={<Login/>}/>
         <Route path="verify" element={<Verify/>}/>
+        <Route path="createShop" element={<CreateShop/>}/>
+        <Route path="deleteShop" element={<DeleteShop/>}/>
+        <Route path="editShop" element={<EditShop/>}/>
       </Route>
     </Routes>
     </div>
