@@ -9,6 +9,7 @@ function About() {
        <Link to="/createShop">Create shop</Link>
        <Link to="/editShop">Edit Shop</Link>
        <Link to="/deleteShop">Delete SHop</Link>
+       <Link to="/infoShop">InfoShop</Link>
     </div>
 
 

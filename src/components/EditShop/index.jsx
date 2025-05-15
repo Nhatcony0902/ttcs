@@ -16,7 +16,7 @@ const EditShop = () => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
 
-    const response = await fetch("http://localhost:8081/home/editShop", {
+    const response = await fetch("http://localhost:8081/manager/editShop", {
       method: "POST", // backend bạn dùng POST
       headers: {
         "Content-Type": "application/json",

@@ -9,6 +9,11 @@ import Verify from './pages/Verify';
 import CreateShop from './components/CreateShop';
 import DeleteShop from './components/DeleteShop';
 import EditShop from './components/EditShop';
+import InfoShop from './components/InfoShop';
+import EditProduct from './components/EditProduct';
+import CreateProduct from './components/CreateProduct';
+import DeleteProduct from './components/DeleteProduct';
+
 
 function App() {
   return (
@@ -24,6 +29,11 @@ function App() {
         <Route path="createShop" element={<CreateShop/>}/>
         <Route path="deleteShop" element={<DeleteShop/>}/>
         <Route path="editShop" element={<EditShop/>}/>
+        <Route path="infoShop" element={<InfoShop/>}/>
+ 
+         <Route path="createProduct" element={<CreateProduct/>}/>
+          <Route path="editProduct" element={<EditProduct/>}/>
+          <Route path="deleteProduct" element={<DeleteProduct/>}/>
       </Route>
     </Routes>
     </div>

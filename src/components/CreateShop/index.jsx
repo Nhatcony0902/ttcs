@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const CreateShop = () => {
   const [userId, setUserId] = useState(null); // Lưu userId
-   const [shopId, setShopId] = useState("");
+  const [shopId, setShopId] = useState("");
   const [shopName, setShopName] = useState("");
   const [address, setAddress] = useState("");
   const [type, setType] = useState("");
@@ -24,7 +24,7 @@ const CreateShop = () => {
   const fetchUserInfo = async (token) => {
     try {
       const response = await fetch(`http://localhost:8081/home/infoToken?token=${token}`, {
-        method: "GET", 
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
@@ -32,7 +32,7 @@ const CreateShop = () => {
 
       if (response.ok) {
         const data = await response.json();
-          console.log(data)
+        console.log(data)
         setUserId(data.id); // Lưu userId từ response trả về
       } else {
         throw new Error("Không thể lấy thông tin người dùng");
@@ -74,9 +74,8 @@ const CreateShop = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        setCreatedShop(data);
-        setMessage("Tạo shop thành công!");
+        const message = await response.text(); // dùng text thay vì json
+        setMessage(message);
       } else {
         throw new Error("Tạo shop thất bại!");
       }

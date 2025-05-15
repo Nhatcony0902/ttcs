@@ -6,7 +6,7 @@ const DeleteShop = () => {
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`http://localhost:8081/home/deleteShop/${shopId}`, {
+    const response = await fetch(`http://localhost:8081/manager/deleteShop/${shopId}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
