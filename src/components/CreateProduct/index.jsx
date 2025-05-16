@@ -38,7 +38,7 @@ const CreateProduct = ({ onProductCreated }) => {
     });
 
     const token = localStorage.getItem("token");
-
+    console.log(token);
     try {
       const res = await fetch("http://localhost:8081/manager/createProduct", {
         method: "POST",
@@ -50,6 +50,7 @@ const CreateProduct = ({ onProductCreated }) => {
       });
 
       const result = await res.text();
+      console.log(result);
       if (res.ok) {
         setMessage("Tạo sản phẩm thành công!");
         onProductCreated?.(); // kiểm tra có callback thì gọi

@@ -1,10 +1,10 @@
 // pages/LoginPage.jsx
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../action/authAction';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const Login = () => {
+function Login () {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isAuthenticated, loading, error } = useSelector((state) => state.auth);
@@ -19,9 +19,11 @@ const Login = () => {
     console.log(token);
   };
 
-  if (isAuthenticated) {
-    navigate('/'); // Chuyển hướng sau khi đăng nhập
-  }
+useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/'); // Chuyển hướng sau khi đăng nhập
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <div>
@@ -44,6 +46,8 @@ const Login = () => {
         <button type="submit" disabled={loading}>
           {loading ? 'Logging in...' : 'Login'}
         </button>
+        <br/>
+        <Link to="/forgotpassword">Quên mật khẩu</Link>
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </form>
     </div>

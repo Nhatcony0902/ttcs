@@ -56,7 +56,7 @@ export const loginUser = (username, password) => async (dispatch) => {
     });
 
     const data = await response.text();
-
+    console.log(data);
     if (data === 'failed to login') {
       dispatch({ type: 'LOGIN_FAIL', payload: 'Invalid credentials or account not verified' });
     } else {
@@ -67,6 +67,10 @@ export const loginUser = (username, password) => async (dispatch) => {
   } catch (error) {
     dispatch({ type: 'LOGIN_FAIL', payload: 'Network error' });
   }
+};
+export const logoutUser = () => (dispatch) => {
+  localStorage.removeItem('token');
+  dispatch({ type: 'LOGOUT' });
 };
 
 

@@ -13,6 +13,8 @@ import InfoShop from './components/InfoShop';
 import EditProduct from './components/EditProduct';
 import CreateProduct from './components/CreateProduct';
 import DeleteProduct from './components/DeleteProduct';
+import Logout from './pages/Logout';
+import ForgotPassword from './components/ForgotPassword';
 
 
 function App() {
@@ -26,11 +28,12 @@ function App() {
         <Route path="register" element={<Register/>}/>
         <Route path="login" element={<Login/>}/>
         <Route path="verify" element={<Verify/>}/>
+         <Route path="logout" element={<Logout/>}/>
+         <Route path="forgotpassword" element={<ForgotPassword/>}/>
         <Route path="createShop" element={<CreateShop/>}/>
         <Route path="deleteShop" element={<DeleteShop/>}/>
         <Route path="editShop" element={<EditShop/>}/>
         <Route path="infoShop" element={<InfoShop/>}/>
- 
          <Route path="createProduct" element={<CreateProduct/>}/>
           <Route path="editProduct" element={<EditProduct/>}/>
           <Route path="deleteProduct" element={<DeleteProduct/>}/>

@@ -17,6 +17,9 @@ function Layouts() {
           <li>
             <Link to="/login">Login</Link>
           </li>
+          <li>
+            <Link to="/logout">Log out</Link>
+          </li>
         </ul>
       </nav>
       <div></div>
