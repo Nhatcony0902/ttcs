@@ -16,6 +16,10 @@ import DeleteProduct from './components/DeleteProduct';
 import Logout from './pages/Logout';
 import ForgotPassword from './components/ForgotPassword';
 import CartItem from './pages/CardItem';
+import User from './components/User';
+import EditProfile from './components/EditProfile';
+import ChangePassword from './components/ChangePassword';
+import DetailProduct from './components/DetailProduct';
 
 
 function App() {
@@ -39,6 +43,10 @@ function App() {
           <Route path="editProduct" element={<EditProduct/>}/>
           <Route path="deleteProduct" element={<DeleteProduct/>}/>
           <Route path="cartItem" element={<CartItem/>}/>
+          <Route path="user" element={<User/>}/>
+           <Route path="editprofile" element={<EditProfile/>}/>
+           <Route path="changepassword" element={<ChangePassword/>}/>
+            <Route path="/product/:productId" element={<DetailProduct/>} />
       </Route>
     </Routes>
     </div>

@@ -8,7 +8,7 @@ const InfoShop = () => {
 
   const handleFetchShop = async () => {
     try {
-      const response = await fetch(`http://localhost:8081/manager/infoShop?shopId=${shopId}`, {
+      const response = await fetch(`http://localhost:8081/home/infoShop?shopId=${shopId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -17,6 +17,7 @@ const InfoShop = () => {
 
       if (response.ok) {
         const data = await response.json();
+
         console.log(data);
         setShopInfo(data);
         setError("");
@@ -51,7 +52,8 @@ const InfoShop = () => {
           <p><strong>Tên:</strong> {shopInfo.name}</p>
           <p><strong>Loại:</strong> {shopInfo.type}</p>
           <p><strong>Đánh giá:</strong> {shopInfo.rating}</p>
-
+          <p><strong>Follower:</strong> {shopInfo.followers
+          }</p>
           {shopInfo.productResponses && shopInfo.productResponses.length > 0 ? (
             <div>
               <h4>Sản phẩm:</h4>

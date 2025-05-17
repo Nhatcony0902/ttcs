@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-function Product () {
+function Product() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,28 +26,27 @@ function Product () {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
       {products.map((product) => (
-        <div
-          key={product.id}
-          className="border rounded-2xl shadow-md p-4 hover:shadow-lg transition-all"
-        >
-          <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
-          <p className="text-sm text-gray-600 mb-1">{product.description}</p>
-          <p className="text-md font-bold text-green-600 mb-1">${product.price.toFixed(2)}</p>
-          <p className="text-sm text-gray-500">Category: {product.category}</p>
-          <p className="text-sm text-gray-500">In stock: {product.quantity}</p>
-          <p className="text-sm text-yellow-600">Rating: {product.rating}</p>
+        <Link to={`/product/${product.id}`} key={product.id}>
+          <div className="border rounded-2xl shadow-md p-4 hover:shadow-lg transition-all">
+            <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
+            <p className="text-sm text-gray-600 mb-1">{product.description}</p>
+            <p className="text-md font-bold text-green-600 mb-1">${product.price.toFixed(2)}</p>
+            <p className="text-sm text-gray-500">Category: {product.category}</p>
+            <p className="text-sm text-gray-500">In stock: {product.quantity}</p>
+            <p className="text-sm text-yellow-600">Rating: {product.rating}</p>
 
-          {product.imageResponses && product.imageResponses.length > 0 && (
-            <img
-              src={product.imageResponses[0].url} // assuming there's a `url` field
-              alt={product.name}
-              className="mt-2 rounded-md object-cover h-40 w-full"
-            />
-          )}
-        </div>
+            {product.imageResponses?.length > 0 && (
+              <img
+                src={product.imageResponses[0].url}
+                alt={product.name}
+                className="mt-2 rounded-md object-cover h-40 w-full"
+              />
+            )}
+          </div>
+        </Link>
       ))}
     </div>
   );
-};
+}
 
 export default Product;

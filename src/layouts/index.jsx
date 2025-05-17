@@ -23,6 +23,12 @@ function Layouts() {
           <li>
             <Link to="/cartitem">Cart </Link>
           </li>
+          <li>
+            <Link to="/user">Profile</Link>
+          </li>
+          <li>
+            <Link to="/changepassword">Change Pass</Link>
+          </li>
         </ul>
       </nav>
       <div></div>
