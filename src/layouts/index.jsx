@@ -20,6 +20,9 @@ function Layouts() {
           <li>
             <Link to="/logout">Log out</Link>
           </li>
+          <li>
+            <Link to="/cartitem">Cart </Link>
+          </li>
         </ul>
       </nav>
       <div></div>

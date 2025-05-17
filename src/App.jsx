@@ -15,6 +15,7 @@ import CreateProduct from './components/CreateProduct';
 import DeleteProduct from './components/DeleteProduct';
 import Logout from './pages/Logout';
 import ForgotPassword from './components/ForgotPassword';
+import CartItem from './pages/CardItem';
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
          <Route path="createProduct" element={<CreateProduct/>}/>
           <Route path="editProduct" element={<EditProduct/>}/>
           <Route path="deleteProduct" element={<DeleteProduct/>}/>
+          <Route path="cartItem" element={<CartItem/>}/>
       </Route>
     </Routes>
     </div>
