@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import AddToCart from '../AddtoCart';
 
 function ProductDetail() {
   const { productId } = useParams();
@@ -8,7 +9,7 @@ function ProductDetail() {
   const [userId, setUserId] = useState(null);
   const [isFollowing, setIsFollowing] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const [ratings, setRatings] = useState([]);
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -19,25 +20,27 @@ function ProductDetail() {
     }
   }, []);
 
-  useEffect(() => {
-    fetch(`http://localhost:8081/home/product?id=${productId}`)
-      .then(res => res.json())
-      .then(productData => {
-        setProduct(productData);
-        setLoading(false);
+ useEffect(() => {
+  fetch(`http://localhost:8081/home/product?id=${productId}`)
+    .then(res => res.json())
+    .then(productData => {
+      setProduct(productData);
+      setRatings(productData.ratingResponses || []); // <-- lấy ratings
+      setLoading(false);
 
-        if (productData.shopId) {
-          fetch(`http://localhost:8081/home/infoShop?shopId=${productData.shopId}`)
-            .then(res => res.json())
-            .then(setShop)
-            .catch(err => console.error("Lỗi lấy shop", err));
-        }
-      })
-      .catch(err => {
-        console.error("Lỗi lấy product", err);
-        setLoading(false);
-      });
-  }, [productId]);
+      if (productData.shopId) {
+        fetch(`http://localhost:8081/home/infoShop?shopId=${productData.shopId}`)
+          .then(res => res.json())
+          .then(setShop)
+          .catch(err => console.error("Lỗi lấy shop", err));
+      }
+    })
+    .catch(err => {
+      console.error("Lỗi lấy product", err);
+      setLoading(false);
+    });
+}, [productId]);
+
 
   // Kiểm tra xem user có đang follow shop không
   useEffect(() => {
@@ -84,7 +87,10 @@ function ProductDetail() {
           ))}
         </div>
       )}
-
+      <AddToCart productId={product.productId} />
+      <Link to="/rating" state={{ productId: productId }}>
+            Viết đánh giá
+          </Link>
       {shop && (
         <div className="mt-6 border-t pt-4">
           <h2 className="text-xl font-semibold mb-2">Shop Info</h2>
@@ -104,8 +110,35 @@ function ProductDetail() {
               </button>
             )}
           </div>
+          
         </div>
       )}
+      <div className="mt-6 border-t pt-4">
+  <h2 className="text-xl font-semibold mb-2">Đánh giá sản phẩm</h2>
+  {ratings.length === 0 ? (
+    <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+  ) : (
+    <div className="space-y-4">
+      {ratings.map(rating => (
+        <div key={rating.id} className="p-4 border rounded shadow">
+          <div className="flex items-center mb-2">
+            <img
+              src={rating.userRatingResponse.url}
+              alt="avatar"
+              className="w-10 h-10 rounded-full mr-3 object-cover"
+            />
+            <div>
+              <p className="font-semibold">{rating.userRatingResponse.username}</p>
+              <p className="text-yellow-500">Đánh giá: {rating.rating} ⭐</p>
+            </div>
+          </div>
+          <p>{rating.content}</p>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
+
     </div>
   );
 }

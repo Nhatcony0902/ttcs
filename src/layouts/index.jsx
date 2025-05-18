@@ -21,7 +21,7 @@ function Layouts() {
             <Link to="/logout">Log out</Link>
           </li>
           <li>
-            <Link to="/cartitem">Cart </Link>
+            <Link to="/cart">Cart </Link>
           </li>
           <li>
             <Link to="/user">Profile</Link>
