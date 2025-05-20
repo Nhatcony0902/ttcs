@@ -106,7 +106,7 @@ const Cart = () => {
               )}
             </div>
             <div className="flex flex-col gap-2">
-              {item.status === "Thêm vào rỏ hàng" && (
+              {item.status === "Thêm vào giỏ hàng" && (
                 <button
                   onClick={() => handleOrder(item.id)}
                   className="bg-blue-600 text-white px-4 py-1 rounded"

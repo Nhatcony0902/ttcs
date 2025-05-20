@@ -23,7 +23,8 @@ const VerifyPage = () => {
     if (isVerified) {
      
       setTimeout(() => {
-        navigate('/login'); // Điều hướng sau 1 giây
+        navigate("/login?from=verify");
+ // Điều hướng sau 1 giây
       }, 1000);
     }
   }, [isVerified, navigate]);
