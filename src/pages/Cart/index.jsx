@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -69,69 +71,122 @@ const Cart = () => {
       });
   };
 
-  if (loading) return <p>Đang tải giỏ hàng...</p>;
-  if (cartItems.length === 0) return <p>Giỏ hàng trống.</p>;
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+    </div>
+  );
+  
+  if (cartItems.length === 0) return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+      <div className="text-center">
+        <svg className="mx-auto h-24 w-24 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+        <h3 className="mt-4 text-xl font-medium text-gray-900">Giỏ hàng trống</h3>
+        <p className="mt-2 text-gray-500">Hãy thêm sản phẩm vào giỏ hàng của bạn</p>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-semibold mb-4">Giỏ hàng của bạn</h2>
-      {message && <p className="mb-4 text-green-600">{message}</p>}
-      {cartItems.map(item => {
-        const product = item.productResponse;
-        console.log('Cart item status:', item.status);
-        return (
-          <div key={item.id} className="border-b py-3 flex items-start gap-4">
-            {product?.imageResponses?.[0]?.url && (
-              <img
-                src={product.imageResponses[0].url}
-                alt={product.name}
-                className="w-24 h-24 object-cover rounded"
-              />
-            )}
-            <div>
-              <h3 className="text-lg font-bold">{product.name}</h3>
-              <p className="text-sm text-gray-600 mb-1">{product.description}</p>
-              <p className="text-sm">Số lượng: {item.quantity}</p>
-              <p className="text-sm">Giá: ${product.price?.toFixed(2)}</p>
-              <p className="text-sm">Trạng thái: <strong>{item.status}</strong></p>
-              {item.orderDate && (
-                <p className="text-sm">
-                  Ngày đặt: {new Date(item.orderDate).toLocaleDateString()}
-                </p>
-              )}
-              {item.deliveryDate && (
-                <p className="text-sm">
-                  Giao dự kiến: {new Date(item.deliveryDate).toLocaleDateString()}
-                </p>
-              )}
-            </div>
-            <div className="flex flex-col gap-2">
-              {item.status === "Thêm vào giỏ hàng" && (
-                <button
-                  onClick={() => handleOrder(item.id)}
-                  className="bg-blue-600 text-white px-4 py-1 rounded"
-                >
-                  Đặt hàng
-                </button>
-              )}
-              {item.status === "Đã đặt hàng" && (
-                <button
-                  onClick={() => handleOrder(item.id)}
-                  className="bg-blue-600 text-white px-4 py-1 rounded"
-                >
-                  Hủy Đặt
-                </button>
-              )}
-              <button
-                onClick={() => handleDelete(item.id)}
-                className="bg-red-600 text-white px-3 py-1 rounded"
-              >
-                Xóa
-              </button>
-            </div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-900">Giỏ hàng của bạn</h2>
+        
+        </div>
+        
+        {message && (
+          <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg animate-fade-in">
+            <p className="text-green-700">{message}</p>
           </div>
-        );
-      })}
+        )}
+
+        <div className="grid gap-6">
+          {cartItems.map(item => {
+            const product = item.productResponse;
+            return (
+              <div key={item.id} className="bg-white rounded-xl shadow-sm overflow-hidden transform transition-all duration-200 hover:shadow-md">
+                <div className="p-6 flex flex-col sm:flex-row gap-6">
+                  {product?.imageResponses?.[0]?.url && (
+                    <div className="flex-shrink-0">
+                      <img
+                        src={product.imageResponses[0].url}
+                        alt={product.name}
+                        className="w-40 h-40 object-cover rounded-lg shadow-sm"
+                      />
+                    </div>
+                  )}
+                  
+                  <div className="flex-grow">
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-3">{product.name}</h3>
+                    <p className="text-gray-600 mb-4 line-clamp-2">{product.description}</p>
+                    
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+                      <div className="bg-gray-50 p-3 rounded-lg">
+                        <p className="text-sm text-gray-500 mb-1">Số lượng</p>
+                        <p className="font-medium text-lg">{item.quantity}</p>
+                      </div>
+                      <div className="bg-gray-50 p-3 rounded-lg">
+                        <p className="text-sm text-gray-500 mb-1">Giá</p>
+                        <p className="font-medium text-lg text-green-600">${product.price?.toFixed(2)}</p>
+                      </div>
+                      <div className="bg-gray-50 p-3 rounded-lg">
+                        <p className="text-sm text-gray-500 mb-1">Trạng thái</p>
+                        <p className="font-medium text-lg text-blue-600">{item.status}</p>
+                      </div>
+                      {item.orderDate && (
+                        <div className="bg-gray-50 p-3 rounded-lg">
+                          <p className="text-sm text-gray-500 mb-1">Ngày đặt</p>
+                          <p className="font-medium text-lg">{new Date(item.orderDate).toLocaleDateString()}</p>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {item.deliveryDate && (
+                      <div className="mt-4 bg-blue-50 p-3 rounded-lg">
+                        <p className="text-sm text-blue-500 mb-1">Giao dự kiến</p>
+                        <p className="font-medium text-blue-700">{new Date(item.deliveryDate).toLocaleDateString()}</p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col gap-3 sm:items-end justify-center">
+                    {item.status === "Thêm vào giỏ hàng" && (
+                      <button
+                        onClick={() => handleOrder(item.id)}
+                        className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-all duration-200 transform hover:scale-105"
+                      >
+                        Đặt hàng
+                      </button>
+                    )}
+                    {item.status === "Đã đặt hàng" && (
+                      <button
+                        onClick={() => handleOrder(item.id)}
+                        className="w-full sm:w-auto bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-3 rounded-lg transition-all duration-200 transform hover:scale-105"
+                      >
+                        Hủy Đặt
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg transition-all duration-200 transform hover:scale-105"
+                    >
+                      Xóa
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };
