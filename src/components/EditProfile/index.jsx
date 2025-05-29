@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function EditProfile ()  {
   const location = useLocation();
@@ -123,6 +123,7 @@ function EditProfile ()  {
             <input name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200" required />
           </div>
           <div className="flex justify-between mt-6">
+            <Link to="/editprofile">
             <button
               type="button"
               onClick={() => navigate(-1)}
@@ -130,6 +131,8 @@ function EditProfile ()  {
             >
               Quay lại
             </button>
+            </Link>
+           
             <button
               type="submit"
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 font-medium shadow"

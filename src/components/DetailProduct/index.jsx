@@ -11,6 +11,8 @@ function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [ratings, setRatings] = useState([]);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [trigger, setTrigger] = useState(0);
+  const [followTrigger, setFollowTrigger] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -41,8 +43,8 @@ function ProductDetail() {
         console.error("Lỗi lấy product", err);
         setLoading(false);
       });
-  }, [productId]);
-
+  }, [productId, trigger]);
+  console.log(product);
   useEffect(() => {
     if (userId && shop?.id) {
       fetch(`http://localhost:8081/customer/getAllFollowedShops?userId=${userId}`)
@@ -53,19 +55,34 @@ function ProductDetail() {
         })
         .catch(err => console.error("Lỗi kiểm tra follow", err));
     }
-  }, [userId, shop]);
+  }, [userId, shop, followTrigger]);
+
+  useEffect(() => {
+    if (product?.shopId) {
+      fetch(`http://localhost:8081/home/infoShop?shopId=${product.shopId}`)
+        .then(res => res.json())
+        .then(setShop)
+        .catch(err => console.error("Lỗi lấy shop", err));
+    }
+  }, [product?.shopId, followTrigger]);
 
   const handleFollow = () => {
     fetch(`http://localhost:8081/customer/follow?userId=${userId}&shopId=${shop.id}`)
       .then(res => res.text())
-      .then(() => setIsFollowing(true))
+      .then(() => {
+        setIsFollowing(true);
+        setFollowTrigger(prev => prev + 1);
+      })
       .catch(err => console.error("Lỗi follow", err));
   };
 
   const handleUnfollow = () => {
     fetch(`http://localhost:8081/customer/unfollow?userId=${userId}&shopId=${shop.id}`)
       .then(res => res.text())
-      .then(() => setIsFollowing(false))
+      .then(() => {
+        setIsFollowing(false);
+        setFollowTrigger(prev => prev + 1);
+      })
       .catch(err => console.error("Lỗi unfollow", err));
   };
 
@@ -79,6 +96,17 @@ function ProductDetail() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="flex items-center mb-6">
+        <Link
+          to="/"
+          className="flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200"
+        >
+          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Quay lại
+        </Link>
+      </div>
       <div className="lg:grid lg:grid-cols-2 lg:gap-x-8">
         {/* Image Gallery */}
         <div className="lg:max-w-lg lg:self-end">
@@ -169,7 +197,7 @@ function ProductDetail() {
           </div>
 
           <div className="mt-8">
-            <AddToCart productId={product.productId} />
+            <AddToCart productId={product.productId} onAddToCart={() => setTrigger(prev => prev + 1)} />
           </div>
 
           <div className="mt-8">
@@ -217,7 +245,7 @@ function ProductDetail() {
             {userId && (
               <button
                 onClick={isFollowing ? handleUnfollow : handleFollow}
-                className={`px-4 py-2 rounded-md text-sm font-medium ${
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                   isFollowing
                     ? 'bg-red-100 text-red-700 hover:bg-red-200'
                     : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
@@ -257,7 +285,7 @@ function ProductDetail() {
                         <svg
                           key={i}
                           className={`w-4 h-4 ${
-                            i < rating.score ? 'text-yellow-400' : 'text-gray-300'
+                            i < rating.rating ? 'text-yellow-400' : 'text-gray-300'
                           }`}
                           fill="currentColor"
                           viewBox="0 0 20 20"

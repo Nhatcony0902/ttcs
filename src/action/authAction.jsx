@@ -63,6 +63,7 @@ export const loginUser = (username, password) => async (dispatch) => {
       // Token received
       localStorage.setItem('token', data); // Lưu token vào localStorage
       dispatch({ type: 'LOGIN_SUCCESS', payload: data });
+      window.dispatchEvent(new CustomEvent("LOGIN_SUCCESS"));
     }
   } catch (error) {
     dispatch({ type: 'LOGIN_FAIL', payload: 'Network error' });

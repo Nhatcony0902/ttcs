@@ -7,13 +7,12 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Verify from './pages/Verify';
 import CreateShop from './components/CreateShop';
-import DeleteShop from './components/DeleteShop';
 import EditShop from './components/EditShop';
 import InfoShop from './components/InfoShop';
 import EditProduct from './components/EditProduct';
 import CreateProduct from './components/CreateProduct';
 import DeleteProduct from './components/DeleteProduct';
-import Logout from './pages/Logout';
+
 import ForgotPassword from './components/ForgotPassword';
 
 import User from './components/User';
@@ -23,8 +22,6 @@ import DetailProduct from './components/DetailProduct';
 import Cart from './pages/Cart';
 import AddToCart from './components/AddtoCart';
 import CreateRating from './components/CreateRating';
-
-
 
 function App() {
   return (
@@ -37,10 +34,9 @@ function App() {
         <Route path="register" element={<Register/>}/>
         <Route path="login" element={<Login/>}/>
         <Route path="verify" element={<Verify/>}/>
-         <Route path="logout" element={<Logout/>}/>
+    
          <Route path="forgotpassword" element={<ForgotPassword/>}/>
         <Route path="createShop" element={<CreateShop/>}/>
-        <Route path="deleteShop" element={<DeleteShop/>}/>
         <Route path="editShop" element={<EditShop/>}/>
         <Route path="infoShop" element={<InfoShop/>}/>
          <Route path="createProduct" element={<CreateProduct/>}/>

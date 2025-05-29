@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-const AddToCart = () => {
+const AddToCart = ({ onAddToCart }) => {
   const { productId } = useParams(); // Lấy productId từ URL
   const [quantity, setQuantity] = useState(1);
   const [userId, setUserId] = useState(null);
@@ -47,6 +47,9 @@ const AddToCart = () => {
       })
       .then(msg => {
         setMessage(msg || 'Đã thêm vào giỏ hàng!');
+        if (onAddToCart) {
+          onAddToCart(); // Gọi callback khi thêm vào giỏ hàng thành công
+        }
       })
       .catch(err => {
         console.error('Lỗi khi thêm giỏ hàng:', err);

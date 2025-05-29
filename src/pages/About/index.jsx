@@ -33,8 +33,7 @@ function About() {
     );
   }
 
-  if (!user || user.roleName
-    !== "MANAGER") {
+  if (!user || user.roleName !== "MANAGER") {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -52,7 +51,7 @@ function About() {
           <div className="px-6 py-8 sm:p-10">
             <h1 className="text-2xl font-bold text-gray-900 mb-8">Quản Lý Cửa Hàng</h1>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Link
                 to="/createShop"
                 className="flex flex-col items-center p-6 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow duration-200"
@@ -80,19 +79,6 @@ function About() {
               </Link>
 
               <Link
-                to="/deleteShop"
-                className="flex flex-col items-center p-6 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow duration-200"
-              >
-                <div className="p-3 bg-red-100 rounded-full mb-4">
-                  <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Xóa Cửa Hàng</h3>
-                <p className="text-sm text-gray-500 text-center">Xóa cửa hàng khỏi hệ thống</p>
-              </Link>
-
-              <Link
                 to="/infoShop"
                 className="flex flex-col items-center p-6 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow duration-200"
               >
@@ -103,32 +89,6 @@ function About() {
                 </div>
                 <h3 className="text-lg font-medium text-gray-900 mb-2">Thông Tin Cửa Hàng</h3>
                 <p className="text-sm text-gray-500 text-center">Xem thông tin chi tiết về cửa hàng</p>
-              </Link>
-
-              <Link
-                to="/manageProducts"
-                className="flex flex-col items-center p-6 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow duration-200"
-              >
-                <div className="p-3 bg-purple-100 rounded-full mb-4">
-                  <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Quản Lý Sản Phẩm</h3>
-                <p className="text-sm text-gray-500 text-center">Thêm, sửa, xóa sản phẩm trong cửa hàng</p>
-              </Link>
-
-              <Link
-                to="/manageOrders"
-                className="flex flex-col items-center p-6 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow duration-200"
-              >
-                <div className="p-3 bg-indigo-100 rounded-full mb-4">
-                  <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Quản Lý Đơn Hàng</h3>
-                <p className="text-sm text-gray-500 text-center">Xem và xử lý các đơn hàng của cửa hàng</p>
               </Link>
             </div>
           </div>

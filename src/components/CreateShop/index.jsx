@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CreateShop = () => {
-  const [userId, setUserId] = useState(null); // Lưu userId
-  const [shopId, setShopId] = useState("");
+  const navigate = useNavigate();
+  const [userId, setUserId] = useState(null);
   const [shopName, setShopName] = useState("");
   const [address, setAddress] = useState("");
   const [type, setType] = useState("");
@@ -11,9 +12,8 @@ const CreateShop = () => {
   const [loading, setLoading] = useState(false);
   const [createdShop, setCreatedShop] = useState(null);
 
-  // Lấy thông tin user từ API
   useEffect(() => {
-    const storedToken = localStorage.getItem("token"); // Lấy token từ localStorage
+    const storedToken = localStorage.getItem("token");
 
     if (storedToken) {
       setToken(storedToken);
@@ -32,8 +32,7 @@ const CreateShop = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data)
-        setUserId(data.id); // Lưu userId từ response trả về
+        setUserId(data.id);
       } else {
         throw new Error("Không thể lấy thông tin người dùng");
       }
@@ -55,9 +54,8 @@ const CreateShop = () => {
     }
 
     const shopData = {
-      shopId: shopId,
       name: shopName,
-      userId: userId, // Dùng userId đã lấy được
+      userId: userId,
       address: address,
       type: type,
     };
@@ -69,13 +67,15 @@ const CreateShop = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(shopData), // Gửi dữ liệu shop dưới dạng JSON
+        body: JSON.stringify(shopData),
       });
 
       if (response.ok) {
-        const message = await response.text(); // dùng text thay vì json
+        const message = await response.text();
         setMessage(message);
+        setCreatedShop(JSON.parse(message));
       } else {
         throw new Error("Tạo shop thất bại!");
       }
@@ -88,56 +88,63 @@ const CreateShop = () => {
   };
 
   return (
-    <div>
-      <h2>Tạo Shop</h2>
-      <div>
-        <input
-          type="text"
-          placeholder="Id shop"
-          value={shopId}
-          onChange={(e) => setShopId(e.target.value)}
-        />
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-gray-800">Tạo Shop</h2>
+        <button
+          onClick={() => navigate('/about')}
+          className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors duration-200"
+        >
+          Quay lại
+        </button>
       </div>
-      <div>
-        <input
-          type="text"
-          placeholder="Tên shop"
-          value={shopName}
-          onChange={(e) => setShopName(e.target.value)}
-        />
-      </div>
-      <div>
-        <input
-          type="text"
-          placeholder="Địa chỉ"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-      </div>
-      <div>
-        <input
-          type="text"
-          placeholder="Loại shop"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-        />
-      </div>
-      <button onClick={handleCreateShop} disabled={loading || !userId}>
-        {loading ? "Đang tạo..." : "Tạo Shop"}
-      </button>
-      {message && <p>{message}</p>}
-
-      {/* Hiển thị thông tin shop đã tạo */}
-      {createdShop && (
+      <div className="space-y-4">
         <div>
-          <h3>Thông tin Shop đã tạo</h3>
-          <p>ID Shop: {createdShop.id}</p>
-          <p>Tên Shop: {createdShop.name}</p>
-          <p>Địa chỉ: {createdShop.address}</p>
-          <p>Loại shop: {createdShop.type}</p>
-          <p>Quản lý Shop: {createdShop.managerId}</p>
+          <input
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            type="text"
+            placeholder="Tên shop"
+            value={shopName}
+            onChange={(e) => setShopName(e.target.value)}
+          />
         </div>
-      )}
+        <div>
+          <input
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            type="text"
+            placeholder="Địa chỉ"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+        </div>
+        <div>
+          <input
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            type="text"
+            placeholder="Loại shop"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+          />
+        </div>
+        <button 
+          onClick={handleCreateShop} 
+          disabled={loading || !userId}
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {loading ? "Đang tạo..." : "Tạo Shop"}
+        </button>
+        {message && <p className="mt-4 text-center text-sm">{message}</p>}
+
+        {createdShop && (
+          <div className="mt-6 p-4 bg-green-50 rounded-lg">
+            <h3 className="text-lg font-medium text-green-800 mb-2">Thông tin Shop đã tạo</h3>
+            <p className="text-sm text-green-700">ID Shop: {createdShop.id}</p>
+            <p className="text-sm text-green-700">Tên Shop: {createdShop.name}</p>
+            <p className="text-sm text-green-700">Địa chỉ: {createdShop.address}</p>
+            <p className="text-sm text-green-700">Loại shop: {createdShop.type}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
