@@ -28,8 +28,9 @@ const InfoShop = () => {
         // Get shop info using user's shop
         if (userData.shops && userData.shops.length > 0) {
           const shop = userData.shops[0];
+          console.log(shop);
           // Fetch detailed shop info
-          const shopResponse = await fetch(`http://localhost:8081/home/infoShop?shopId=${shop.id}`);
+          const shopResponse = await fetch(`http://localhost:8081/home/infoShop?shopId=${shop}`);
           if (!shopResponse.ok) {
             throw new Error("Không thể lấy thông tin chi tiết shop");
           }
@@ -116,7 +117,7 @@ const InfoShop = () => {
               <h3 className="text-xl font-semibold text-gray-800 mb-4">Thông tin cơ bản</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <p className="text-gray-600"><span className="font-medium">ID:</span> {shopInfo.id}</p>
+         
                   <p className="text-gray-600"><span className="font-medium">Tên:</span> {shopInfo.name}</p>
                   <p className="text-gray-600"><span className="font-medium">Loại:</span> {shopInfo.type}</p>
                 </div>

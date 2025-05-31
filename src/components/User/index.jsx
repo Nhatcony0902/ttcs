@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 function User() {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -42,6 +43,13 @@ function User() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className="mb-4 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+        >
+          <Link to="/"> Quay lại</Link>
+        </button>
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all hover:shadow-2xl">
           <div className="flex flex-col items-center py-10 px-6">
             <div className="h-32 w-32 rounded-full bg-white p-1 shadow-lg mb-4">

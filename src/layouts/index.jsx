@@ -151,7 +151,7 @@ function Layouts() {
           }
 
           .menu-item:hover::after {
-            content: '❤️';
+            content: '🔥';
             position: absolute;
             top: 50%;
             left: 50%;
@@ -162,15 +162,15 @@ function Layouts() {
           }
 
           .menu-item:nth-child(2):hover::after {
-            content: '🌸';
+            content: '🔥';
           }
 
           .menu-item:nth-child(3):hover::after {
-            content: '✨';
+            content: '🔥';
           }
 
           .menu-item:nth-child(4):hover::after {
-            content: '🌟';
+            content: '🔥';
           }
         `}
       </style>

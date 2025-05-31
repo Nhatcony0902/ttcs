@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const CreateRating = ({ onSuccess }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const productId = location.state?.productId;
 
   const [userId, setUserId] = useState(null);
@@ -55,6 +56,13 @@ const CreateRating = ({ onSuccess }) => {
 
   return (
     <form onSubmit={handleSubmit} className="p-4 border rounded space-y-3 mt-4">
+      <button
+        type="button"
+        onClick={() => navigate(-1)}
+        className="mb-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+      >
+        Quay lại
+      </button>
       <h3 className="font-semibold text-lg">Gửi đánh giá của bạn</h3>
       <textarea
         value={content}
