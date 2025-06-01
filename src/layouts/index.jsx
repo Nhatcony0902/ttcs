@@ -179,7 +179,11 @@ function Layouts() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <Link to="/" className="flex items-center group">
+              <Link
+                to="/"
+                className="flex items-center group"
+                onClick={() => window.dispatchEvent(new Event("RESET_HOME"))}
+              >
                 <span className="text-white text-xl font-bold group-hover:text-purple-200 transition-colors duration-200">Shop</span>
               </Link>
               <div className="hidden md:block ml-10">

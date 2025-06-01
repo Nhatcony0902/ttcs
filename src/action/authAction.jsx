@@ -6,7 +6,7 @@ export const register = (userData) => async (dispatch) => {
             body: JSON.stringify(userData),
         });
 
-        const result = await res.text(); // backend trả chuỗi
+        const result = await res.text(); 
 
         if (result === 'registered successfully') {
             dispatch({ type: 'REGISTER_SUCCESS' });
@@ -32,7 +32,7 @@ export const verifyAccount = (email, verificationCode) => async (dispatch) => {
       },
     });
 
-    const data = await response.text(); // Vì backend trả về plain text
+    const data = await response.text(); 
 
     dispatch({
       type: 'VERIFY_SUCCESS',
@@ -60,8 +60,8 @@ export const loginUser = (username, password) => async (dispatch) => {
     if (data === 'failed to login') {
       dispatch({ type: 'LOGIN_FAIL', payload: 'Invalid credentials or account not verified' });
     } else {
-      // Token received
-      localStorage.setItem('token', data); // Lưu token vào localStorage
+      
+      localStorage.setItem('token', data); 
       dispatch({ type: 'LOGIN_SUCCESS', payload: data });
       window.dispatchEvent(new CustomEvent("LOGIN_SUCCESS"));
     }

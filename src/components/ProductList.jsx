@@ -1,23 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
-const SearchProduct = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [params, setParams] = useState({
-    name: "",
-    description: "",
-    price: "",
-    category: "",
-    quantity: "",
-    rating: "",
-    shopAddress: "",
-    shopName: "",
-    shopRating: "",
-    shopType: "",
-  });
+const initialParams = {
+  name: "",
+  description: "",
+  price: "",
+  category: "",
+  quantity: "",
+  rating: "",
+  shopAddress: "",
+  shopName: "",
+  shopRating: "",
+  shopType: "",
+};
 
+function ProductList() {
   const [products, setProducts] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [params, setParams] = useState(initialParams);
   const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+
+  // Fetch all products on mount or reset
+  const fetchAllProducts = () => {
+    setLoading(true);
+    fetch('http://localhost:8081/home/findAll')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch');
+        return res.json();
+      })
+      .then((data) => {
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchAllProducts();
+    // Listen for RESET_HOME event
+    const handleReset = () => {
+      setIsSearching(false);
+      setSearchResults([]);
+      setParams(initialParams);
+      setMessage("");
+      fetchAllProducts();
+    };
+    window.addEventListener("RESET_HOME", handleReset);
+    return () => window.removeEventListener("RESET_HOME", handleReset);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,10 +78,10 @@ const SearchProduct = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
       if (response.ok) {
         const data = await response.json();
-        setProducts(data);
+        setSearchResults(data);
+        setIsSearching(true);
         setMessage(data.length > 0 ? "" : "Không tìm thấy sản phẩm.");
         setIsModalOpen(false);
       } else {
@@ -60,34 +96,38 @@ const SearchProduct = () => {
     }
   };
 
+  // UI
   return (
     <div className="w-full max-w-7xl mx-auto p-4">
-      <div className="relative">
-        <input
-          type="text"
-          placeholder="Tìm kiếm sản phẩm..."
-          onClick={() => setIsModalOpen(true)}
-          className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          readOnly
-        />
-        <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-          <svg
-            className="h-5 w-5 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
+      {/* Search input */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="relative flex-1 mr-4">
+          <input
+            type="text"
+            placeholder="Tìm kiếm sản phẩm..."
+            onClick={() => setIsModalOpen(true)}
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            readOnly
+          />
+          <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+            <svg
+              className="h-5 w-5 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Modal search */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -102,7 +142,6 @@ const SearchProduct = () => {
                 </svg>
               </button>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               {Object.keys(params).map((field) => (
                 <div key={field} className="flex flex-col">
@@ -120,7 +159,6 @@ const SearchProduct = () => {
                 </div>
               ))}
             </div>
-
             <div className="flex justify-end space-x-4">
               <button
                 onClick={() => setIsModalOpen(false)}
@@ -156,30 +194,34 @@ const SearchProduct = () => {
         </div>
       )}
 
-      {products.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-          {products.map((product) => (
-            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-200">
-              {product.imageResponses && product.imageResponses.length > 0 && (
-                <div className="aspect-w-16 aspect-h-9">
-                  <img
-                    src={product.imageResponses[0].url}
-                    alt={product.name}
-                    className="w-full h-48 object-cover"
-                  />
-                </div>
-              )}
-              
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{product.name}</h3>
-                <p className="text-sm text-gray-600 mb-2 line-clamp-2">{product.description}</p>
-                
-                <div className="space-y-2">
-                  <p className="text-lg font-bold text-green-600">${product.price}</p>
-                  <p className="text-sm text-gray-500">Loại: {product.category}</p>
-                  <p className="text-sm text-gray-500">Số lượng: {product.quantity}</p>
-                  <div className="flex items-center">
-                    <span className="text-sm text-gray-500 mr-2">Đánh giá:</span>
+      {/* Product grid */}
+      {loading ? (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6">
+          {(isSearching ? searchResults : products).map((product) => (
+            <Link to={`/product/${product.id}`} key={product.id} className="group">
+              <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                {product.imageResponses?.length > 0 ? (
+                  <div className="relative h-48 overflow-hidden">
+                    <img
+                      src={product.imageResponses[0].url}
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                ) : (
+                  <div className="h-48 bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400">No image available</span>
+                  </div>
+                )}
+                <div className="p-4">
+                  <h2 className="text-xl font-semibold text-gray-800 mb-2 line-clamp-1">{product.name}</h2>
+                  <p className="text-sm text-gray-600 mb-3 line-clamp-2">{product.description}</p>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-lg font-bold text-green-600">${product.price.toFixed(2)}</span>
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
                         <svg
@@ -196,45 +238,32 @@ const SearchProduct = () => {
                         </svg>
                       ))}
                       <span className="ml-1 text-sm text-gray-500">
-                        {product.rating ? product.rating.toFixed(1) : "Chưa có"}
+                        {product.rating ? product.rating.toFixed(1) : "N/A"}
                       </span>
                     </div>
                   </div>
-                </div>
-
-                {product.ratingResponses && product.ratingResponses.length > 0 && (
-                  <div className="mt-4 pt-4 border-t border-gray-200">
-                    <h4 className="text-sm font-medium text-gray-900 mb-2">Đánh giá chi tiết:</h4>
-                    <div className="space-y-2">
-                      {product.ratingResponses.map((rate, i) => (
-                        <div key={i} className="text-sm text-gray-600">
-                          <div className="flex items-center mb-1">
-                            {[...Array(5)].map((_, j) => (
-                              <svg
-                                key={j}
-                                className={`w-3 h-3 ${
-                                  j < rate.score ? 'text-yellow-400' : 'text-gray-300'
-                                }`}
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                              </svg>
-                            ))}
-                          </div>
-                          <p className="text-gray-500">{rate.comment || "Không có bình luận"}</p>
-                        </div>
-                      ))}
-                    </div>
+                  <div className="flex items-center justify-between text-sm text-gray-500">
+                    <span className="flex items-center">
+                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                      </svg>
+                      {product.category}
+                    </span>
+                    <span className="flex items-center">
+                      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                      </svg>
+                      {product.quantity} in stock
+                    </span>
                   </div>
-                )}
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}
     </div>
   );
-};
+}
 
-export default SearchProduct;
+export default ProductList; 
