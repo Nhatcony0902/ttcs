@@ -11,6 +11,7 @@ function Layouts() {
   const [isLoading, setIsLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token')); 
   const [trigger, setTrigger] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
   const navigate = useNavigate();
@@ -186,6 +187,8 @@ function Layouts() {
               >
                 <span className="text-white text-xl font-bold group-hover:text-purple-200 transition-colors duration-200">Shop</span>
               </Link>
+              
+              {/* Desktop Menu */}
               <div className="hidden md:block ml-10">
                 <ul className="flex space-x-8">
                   <li className="menu-item">
@@ -247,12 +250,6 @@ function Layouts() {
                           ? 'text-white' 
                           : 'text-gray-200 hover:text-white'
                       }`}
-                      onClick={(e) => {
-                        if (!localStorage.getItem("token")) {
-                          e.preventDefault();
-                          alert("Vui lòng đăng nhập để xem giỏ hàng.");
-                        }
-                      }}
                     >
                       <span className="relative z-10">Cart</span>
                       {location.pathname === '/cart' && (
@@ -264,7 +261,38 @@ function Layouts() {
               </div>
             </div>
 
-            <div className="flex items-center">
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="inline-flex items-center justify-center p-2 rounded-md text-gray-200 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              >
+                <span className="sr-only">Open main menu</span>
+                {/* Hamburger icon */}
+                <svg
+                  className={`${isMobileMenuOpen ? 'hidden' : 'block'} h-6 w-6`}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                {/* Close icon */}
+                <svg
+                  className={`${isMobileMenuOpen ? 'block' : 'hidden'} h-6 w-6`}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* User menu */}
+            <div className="hidden md:block">
               {!isLoggedIn ? (
                 <div className="flex space-x-4">
                   <Link 
@@ -347,6 +375,115 @@ function Layouts() {
                 </div>
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Mobile menu */}
+        <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:hidden`}>
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <Link
+              to="/"
+              className={`block px-3 py-2 rounded-md text-base font-medium ${
+                location.pathname === '/' 
+                  ? 'text-white bg-gray-900' 
+                  : 'text-gray-200 hover:text-white hover:bg-gray-700'
+              }`}
+            >
+              Home
+            </Link>
+            <Link
+              to="/about"
+              className={`block px-3 py-2 rounded-md text-base font-medium ${
+                location.pathname === '/about' 
+                  ? 'text-white bg-gray-900' 
+                  : 'text-gray-200 hover:text-white hover:bg-gray-700'
+              }`}
+              onClick={async (e) => {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                  e.preventDefault();
+                  alert("Vui lòng đăng nhập để truy cập trang này.");
+                  return;
+                }
+                try {
+                  const res = await fetch(`http://localhost:8081/home/infoToken?token=${token}`);
+                  const data = await res.json();
+                  if (data.roleName !== "MANAGER") {
+                    e.preventDefault();
+                    alert("Chỉ người quản lý (MANAGER) mới được vào trang này.");
+                  }
+                } catch (err) {
+                  e.preventDefault();
+                  alert("Không thể xác minh quyền truy cập.");
+                }
+              }}
+            >
+              About
+            </Link>
+            <Link
+              to="/cart"
+              className={`block px-3 py-2 rounded-md text-base font-medium ${
+                location.pathname === '/cart' 
+                  ? 'text-white bg-gray-900' 
+                  : 'text-gray-200 hover:text-white hover:bg-gray-700'
+              }`}
+            >
+              Cart
+            </Link>
+
+            {/* Mobile User Menu */}
+            {!isLoggedIn ? (
+              <>
+                <Link
+                  to="/register"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:text-white hover:bg-gray-700"
+                >
+                  Register
+                </Link>
+                <Link
+                  to="/login"
+                  className="block px-3 py-2 rounded-md text-base font-medium bg-white text-purple-600 hover:bg-purple-50"
+                >
+                  Login
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/editprofile"
+                  className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:text-white hover:bg-gray-700"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  Profile
+                </Link>
+                <Link
+                  to="/changepassword"
+                  className="flex items-center px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:text-white hover:bg-gray-700"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                  </svg>
+                  Change Password
+                </Link>
+                <button
+                  onClick={() => {
+                    dispatch(logoutUser());
+                    window.dispatchEvent(new CustomEvent("LOGOUT_SUCCESS"));
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="flex items-center w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  Logout
+                </button>
+              </>
+            )}
           </div>
         </div>
       </nav>

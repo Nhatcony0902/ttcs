@@ -72,12 +72,18 @@ const CreateShop = () => {
         body: JSON.stringify(shopData),
       });
 
+      const responseText = await response.text();
+      
       if (response.ok) {
-        const message = await response.text();
-        setMessage(message);
-        setCreatedShop(JSON.parse(message));
+        try {
+          const shopData = JSON.parse(responseText);
+          setCreatedShop(shopData);
+          setMessage("Tạo shop thành công!");
+        } catch (parseError) {
+          setMessage(responseText);
+        }
       } else {
-        throw new Error("Tạo shop thất bại!");
+        setMessage(responseText || "Tạo shop thất bại!");
       }
     } catch (error) {
       setMessage("Tạo shop thất bại!");
@@ -118,13 +124,16 @@ const CreateShop = () => {
           />
         </div>
         <div>
-          <input
+          <select
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="text"
-            placeholder="Loại shop"
             value={type}
             onChange={(e) => setType(e.target.value)}
-          />
+          >
+            <option value="">Chọn loại shop</option>
+            <option value="Tap_hoa">Tạp hóa</option>
+            <option value="Thoi_trang">Thời trang</option>
+            <option value="Vat_lieu">Vật liệu</option>
+          </select>
         </div>
         <button 
           onClick={handleCreateShop} 

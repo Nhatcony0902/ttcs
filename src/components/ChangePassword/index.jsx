@@ -50,7 +50,7 @@ function ChangePassword() {
       if (response.ok) {
         setSuccess('Đổi mật khẩu thành công');
         setTimeout(() => {
-          navigate('/profile');
+          navigate('/user');
         }, 2000);
       } else {
         const error = await response.text();

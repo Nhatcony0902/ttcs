@@ -67,7 +67,7 @@ function EditProfile ()  {
       if (response.ok) {
         const message = await response.text();
         alert("Profile updated: " + message);
-        navigate("/user");
+        navigate("/");
       } else {
         alert("Failed to update profile.");
       }
