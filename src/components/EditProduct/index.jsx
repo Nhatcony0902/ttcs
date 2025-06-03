@@ -41,7 +41,6 @@ const EditProduct = () => {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
-          // Không set Content-Type khi dùng FormData
         },
         body: formData,
       });

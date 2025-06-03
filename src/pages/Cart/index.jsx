@@ -25,7 +25,12 @@ const Cart = () => {
 
   const fetchCartItems = () => {
     setLoading(true);
-    fetch(`http://localhost:8081/customer/getCartItems?userId=${userId}`)
+    const token = localStorage.getItem('token');
+    fetch(`http://localhost:8081/customer/getCartItems?userId=${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then(res => res.json())
       .then(data => {
         setCartItems(data || []);
@@ -38,8 +43,12 @@ const Cart = () => {
   };
 
   const handleDelete = (cartItemId) => {
+    const token = localStorage.getItem('token');
     fetch(`http://localhost:8081/customer/deleteCartItem/${cartItemId}`, {
       method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then(res => {
         if (!res.ok) throw new Error('Xóa thất bại');
@@ -56,7 +65,12 @@ const Cart = () => {
   };
   
   const handleOrder = (cartItemId) => {
-    fetch(`http://localhost:8081/customer/order?cartItemId=${cartItemId}`)
+    const token = localStorage.getItem('token');
+    fetch(`http://localhost:8081/customer/order?cartItemId=${cartItemId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then(res => {
         if (!res.ok) throw new Error('Đặt hàng thất bại');
         return res.text();
@@ -68,6 +82,34 @@ const Cart = () => {
       .catch(err => {
         console.error('Lỗi khi đặt hàng:', err);
         setMessage('Lỗi khi đặt hàng');
+      });
+  };
+
+  const handleCancelOrder = (cartItemId) => {
+    const token = localStorage.getItem('token');
+    fetch(`http://localhost:8081/customer/cancel?cartItemId=${cartItemId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Hủy đặt hàng thất bại');
+        return res.text();
+      })
+      .then(msg => {
+        setMessage(msg);
+        setCartItems(prevItems => 
+          prevItems.map(item => 
+            item.id === cartItemId 
+              ? { ...item, status: "Thêm vào giỏ hàng" }
+              : item
+          )
+        );
+      })
+      .catch(err => {
+        console.error('Lỗi khi hủy đặt hàng:', err);
+        setMessage('Lỗi khi hủy đặt hàng');
       });
   };
 
@@ -179,10 +221,18 @@ const Cart = () => {
                     )}
                     {item.status === "Đã đặt hàng" && (
                       <button
-                        onClick={() => handleOrder(item.id)}
+                        onClick={() => handleCancelOrder(item.id)}
                         className="w-full sm:w-auto bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-3 rounded-lg transition-all duration-200 transform hover:scale-105"
                       >
                         Hủy Đặt
+                      </button>
+                    )}
+                    {item.status === "Đã hủy" && (
+                      <button
+                        onClick={() => handleOrder(item.id)}
+                        className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-all duration-200 transform hover:scale-105"
+                      >
+                        Đặt lại
                       </button>
                     )}
                     <button

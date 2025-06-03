@@ -1,8 +1,9 @@
 export const register = (userData) => async (dispatch) => {
     try {
+        const token = localStorage.getItem('token');
         const res = await fetch('http://localhost:8081/home/register', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', ...(token && { Authorization: `Bearer ${token}` }) },
             body: JSON.stringify(userData),
         });
 
@@ -22,13 +23,14 @@ export const register = (userData) => async (dispatch) => {
 export const verifyAccount = (email, verificationCode) => async (dispatch) => {
   try {
     dispatch({ type: 'VERIFY_REQUEST' });
-
+    const token = localStorage.getItem('token');
     const url = `http://localhost:8081/home/verify?email=${encodeURIComponent(email)}&verificationCode=${encodeURIComponent(verificationCode)}`;
 
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        ...(token && { Authorization: `Bearer ${token}` })
       },
     });
 
@@ -48,7 +50,6 @@ export const verifyAccount = (email, verificationCode) => async (dispatch) => {
 export const loginUser = (username, password) => async (dispatch) => {
   try {
     dispatch({ type: 'LOGIN_REQUEST' });
-
     const response = await fetch('http://localhost:8081/home/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

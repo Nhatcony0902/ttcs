@@ -26,7 +26,12 @@ function ProductList() {
   // Fetch all products on mount or reset
   const fetchAllProducts = () => {
     setLoading(true);
-    fetch('http://localhost:8081/home/findAll')
+    const token = localStorage.getItem("token");
+    fetch('http://localhost:8081/home/findAll', {
+      headers: {
+        ...(token && { Authorization: `Bearer ${token}` })
+      }
+    })
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch');
         return res.json();

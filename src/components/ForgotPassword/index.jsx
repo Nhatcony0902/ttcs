@@ -11,10 +11,12 @@ import React, { useState } from 'react';
       setError('');
 
       try {
+        const token = localStorage.getItem('token');
         const response = await fetch(`http://localhost:8081/home/forgotPassword?email=${encodeURIComponent(email)}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            ...(token && { Authorization: `Bearer ${token}` })
           },
         });
 

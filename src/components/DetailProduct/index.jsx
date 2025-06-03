@@ -47,7 +47,12 @@ function ProductDetail() {
   console.log(product);
   useEffect(() => {
     if (userId && shop?.id) {
-      fetch(`http://localhost:8081/customer/getAllFollowedShops?userId=${userId}`)
+      const token = localStorage.getItem('token');
+      fetch(`http://localhost:8081/customer/getAllFollowedShops?userId=${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then(res => res.json())
         .then(followedShops => {
           const isFollowed = followedShops.some(s => s.id === shop.id);
@@ -67,7 +72,12 @@ function ProductDetail() {
   }, [product?.shopId, followTrigger]);
 
   const handleFollow = () => {
-    fetch(`http://localhost:8081/customer/follow?userId=${userId}&shopId=${shop.id}`)
+    const token = localStorage.getItem('token');
+    fetch(`http://localhost:8081/customer/follow?userId=${userId}&shopId=${shop.id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then(res => res.text())
       .then(() => {
         setIsFollowing(true);
@@ -77,7 +87,12 @@ function ProductDetail() {
   };
 
   const handleUnfollow = () => {
-    fetch(`http://localhost:8081/customer/unfollow?userId=${userId}&shopId=${shop.id}`)
+    const token = localStorage.getItem('token');
+    fetch(`http://localhost:8081/customer/unfollow?userId=${userId}&shopId=${shop.id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then(res => res.text())
       .then(() => {
         setIsFollowing(false);

@@ -59,8 +59,12 @@ function EditProfile ()  {
     });
 
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch("http://localhost:8081/customer/editProfile", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: payload,
       });
 
