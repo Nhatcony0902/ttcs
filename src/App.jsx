@@ -12,9 +12,7 @@ import InfoShop from './components/InfoShop';
 import EditProduct from './components/EditProduct';
 import CreateProduct from './components/CreateProduct';
 import DeleteProduct from './components/DeleteProduct';
-
 import ForgotPassword from './components/ForgotPassword';
-
 import User from './components/User';
 import EditProfile from './components/EditProfile';
 import ChangePassword from './components/ChangePassword';
@@ -26,31 +24,30 @@ import CreateRating from './components/CreateRating';
 function App() {
   return (
     <div className="min-h-screen bg-gray-100">
-     <Routes>
-      <Route path="/" element={<Layouts />}>
-        <Route index element={<Home />} />
-        <Route path="about" element={<About />} />
-        <Route path="*" element={<NotFound />} />
-        <Route path="register" element={<Register/>}/>
-        <Route path="login" element={<Login/>}/>
-        <Route path="verify" element={<Verify/>}/>
-    
-         <Route path="forgotpassword" element={<ForgotPassword/>}/>
-        <Route path="createShop" element={<CreateShop/>}/>
-        <Route path="editShop" element={<EditShop/>}/>
-        <Route path="infoShop" element={<InfoShop/>}/>
-         <Route path="createProduct" element={<CreateProduct/>}/>
-          <Route path="editProduct" element={<EditProduct/>}/>
-          <Route path="deleteProduct" element={<DeleteProduct/>}/>
-          <Route path="cart" element={<Cart/>}/>
-          <Route path="user" element={<User/>}/>
-           <Route path="editprofile" element={<EditProfile/>}/>
-           <Route path="changepassword" element={<ChangePassword/>}/>
-            <Route path="/product/:productId" element={<DetailProduct/>} />
-             <Route path="/product/:productId/add-to-cart" element={<AddToCart />} />
-             <Route path='/rating' element={<CreateRating/>}/>
-      </Route>
-    </Routes>
+      <Routes>
+        <Route path="/" element={<Layouts />}>
+          <Route index element={<Home />} />
+          <Route path="about" element={<About />} />
+          <Route path="*" element={<NotFound />} />
+          <Route path="register" element={<Register />} />
+          <Route path="login" element={<Login />} />
+          <Route path="verify" element={<Verify />} />
+          <Route path="forgotpassword" element={<ForgotPassword />} />
+          <Route path="createShop" element={<CreateShop />} />
+          <Route path="editShop" element={<EditShop />} />
+          <Route path="infoShop" element={<InfoShop />} />
+          <Route path="createProduct" element={<CreateProduct />} />
+          <Route path="editProduct" element={<EditProduct />} />
+          <Route path="deleteProduct" element={<DeleteProduct />} />
+          <Route path="cart" element={<Cart />} />
+          <Route path="user" element={<User />} />
+          <Route path="editprofile" element={<EditProfile />} />
+          <Route path="changepassword" element={<ChangePassword />} />
+          <Route path="/product/:productId" element={<DetailProduct />} />
+          <Route path="/product/:productId/add-to-cart" element={<AddToCart />} />
+          <Route path='/rating' element={<CreateRating />} />
+        </Route>
+      </Routes>
     </div>
   );
 }
