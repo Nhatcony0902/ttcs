@@ -1,5 +1,8 @@
+```markdown
+
 ## Dự án web bán hàng 
 ## Cấu trúc source code
+```text
 ttcs/
 └── my-app/
     ├── public/                # Thư mục chứa các file tĩnh (favicon, ảnh, v.v.)
