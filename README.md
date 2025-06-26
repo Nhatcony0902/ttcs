@@ -2,6 +2,7 @@
 
 ## Cấu trúc source code
 
+```bash
 ttcs/
 └── my-app/
     ├── public/                # Thư mục chứa các file tĩnh (favicon, ảnh, v.v.)
@@ -60,6 +61,7 @@ ttcs/
     ├── vite.config.js         # Cấu hình Vite
     ├── eslint.config.js       # Cấu hình ESLint
     └── .gitignore             # Các file/thư mục bị loại trừ khỏi git
+
 
 ## Hướng dẫn cài đặt & Chạy chương trình
 
